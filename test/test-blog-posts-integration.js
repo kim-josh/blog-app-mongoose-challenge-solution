@@ -9,18 +9,14 @@ const {TEST_DATABASE_URL} = require('../config');
 
 chai.use(chaiHttp);
 
-function generateAuthor() {
-  const firstName = faker.name.firstName();
-  const lastName = faker.name.lastName();
-  return `${firstName} ${lastName}`.trim();
-}
-
 function generateBlogData() {
   return {
-    author: generateAuthor(),
+    author: {
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName()  
+    },
     title: faker.lorem.words(),
     content: faker.lorem.paragraphs(),
-    created: faker.date.past()
   }
 }
 
@@ -64,21 +60,20 @@ describe('Blog API resource', function() {
         .then(function(res) {
           res.should.have.status(200);
           res.should.be.json;
-          res.body.posts.should.be.a('array');
-          res.body.posts.should.have.length.of.at.least(1);
-          res.body.posts.forEach(function(post) {
+          res.body.should.be.a('array');
+          res.body.should.have.length.of.at.least(1);
+          res.body.forEach(function(post) {
             post.should.be.a('object');
             post.should.include.keys('id', 'author', 'content', 'title', 'created');
           });
-          resPost = res.body.posts[0];
+          resPost = res.body[0];
           return BlogPost.findById(resPost.id);
         })
         .then(function(post) {
           resPost.id.should.equal(post.id);
-          resPost.author.should.equal(post.author);
+          resPost.author.should.equal(post.authorName);
           resPost.content.should.equal(post.content);
           resPost.title.should.equal(post.title);
-          resPost.created.should.equal(post.created)
         });
     });
   });
@@ -98,13 +93,14 @@ describe('Blog API resource', function() {
           res.body.should.be.a('object');
           res.body.should.include.keys('id', 'author', 'content', 'title', 'created');
           res.body.id.should.not.be.null;
-          res.body.author.should.equal(newPost.author);
+          res.body.author.should.equal(`${newPost.author.firstName} ${newPost.author.lastName}`);
           res.body.content.should.equal(newPost.content);
           res.body.title.should.equal(newPost.title);
           return BlogPost.findById(res.body.id);
         })
         .then(function(post) {
-          post.author.should.equal(newPost.author);
+          post.author.firstName.should.equal(newPost.author.firstName);
+          post.author.lastName.should.equal(newPost.author.lastName);
           post.content.should.equal(newPost.content);
           post.title.should.equal(newPost.title);
         });
@@ -119,8 +115,11 @@ describe('Blog API resource', function() {
       const updatePost = {
         title: "500 Days of Winter",
         content: "Lorem Ipsum",
-        author: "K Dot"
-      }
+        author: {
+          firstName: "Kendrick",
+          lastName: "Lamar"
+        }
+      };
       return BlogPost
         .findOne()
         .then(function(post) {
@@ -136,7 +135,8 @@ describe('Blog API resource', function() {
         .then(function(post) {
           post.title.should.equal(updatePost.title);
           post.content.should.equal(updatePost.content);
-          post.author.should.equal(updatePost.author);
+          post.author.firstName.should.equal(updatePost.author.firstName);
+          post.author.lastName.should.equal(updatePost.author.lastName);
         });
     });
   });
