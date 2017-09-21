@@ -2,3 +2,10 @@ language: node_js
 node_js: node
 services:
 - mongodb
+deploy:
+  provider: heroku
+  api_key:
+    secure: lxG13jIDIElnELUGWc3xF5NcTPv8gVqPVSN/lZk+Ju3aZpnGrP3XzdFT/HlQei+XI7QWdwHHhIFJs5UG+ijTK+zp77UzUjY+xBwLaT6QAQo1m6GI/qb0yltJZBoae9/uqFCOG755jmt7sN9fEsPCH0w/H7IGzX4EH6b2v7gzHs5FHvt4XaSJmupn8g1SpbPCmp1JpovsI1GVJ6lSfVvBlcIgjR/fXz5SLNpIVVVrCqN6Kbzk8rFjkWfDX9QoTOTVhyx+hO4E+Sx3Kbps3gOBccYPwex+RIpu67XiSio2b2nDZVo/UR/l+KMkLJiGYDHyyx0kpANbrJqnjtq8rhBAotC3CerAUZiYAqMBw3QXbpbAE1Zu9Jin0yzgVL1IDvK12BRBNUwtgXqiUQfchsrBh4+C6L4WEVrBPB7zLJR81vMTrpj0SxYb4eF4wTVaQtsKFBo5dQYkh7c/B2OO2KroShXNtxkb0L0MncSCYJo8MsdYTpf3QQTEkr6Z0g5mNuMFp3AtO6SlSDbSC/o3zBzFYI2JA7c4EqVvd8NvaJGvQpMRw3Q/mdqeJA998Up4hETsT0CFoMTZITw6anwqWRizT5f1Qea75PyJElrksGEsNrFygFhwyTPNkt4f5a15N2LaLq+DobpdBKCrKxwJlg0j0QzriCfeBFWUvR/uuY8MrmE=
+  app: tranquil-oasis-17544
+  on:
+    repo: kim-josh/blog-app-mongoose-challenge-solution
